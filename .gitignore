@@ -1,2 +1,6 @@
-/app/data
+vscode/
+
+**/__pycache__
+
+app/data/
 shared/ai/

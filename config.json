@@ -11,7 +11,8 @@
       "instruments": "app/data/instruments/binance.csv",
       "url": {
         "root": "https://api.binance.com/api/v3/",
-        "instruments" : "https://api.binance.com/api/v3/exchangeInfo"
+        "instruments" : "https://api.binance.com/api/v3/exchangeInfo",
+        "candles": "https://api.binance.com/api/v3/klines?symbol="
       }
     },
     "okx": {
@@ -23,7 +24,10 @@
     },
     "bybit": {
       "instruments": "app/data/instruments/bybit.csv",
-      "url": "https://api.bybit.com/v5/"
+      "url": {
+        "root": "https://api.bybit.com/v5/",
+        "instruments" : "https://api.bybit.com/v5/market/instruments-info?category="
+      }
     }
   }
 }

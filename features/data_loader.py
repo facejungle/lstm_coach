@@ -1,9 +1,8 @@
-import io
 import json
-import aiofiles
-import aiohttp
 import pandas as pd
 import asyncio
+
+from shared.utils.async_utils import request_async, read_csv, write_csv
 
 
 class DataLoader():
@@ -13,41 +12,17 @@ class DataLoader():
         self.OKX: str = self.AppCfg['markets']['okx']
         self.BYBIT: str = self.AppCfg['markets']['bybit']
 
-    async def make_request(self, url):
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                data = await response.json()
-                return data
-
-    async def read_csv_async(self, file_path):
-        async with aiofiles.open(file_path, mode='r') as file:
-            content = await file.read()
-            if content.strip():
-                df = pd.read_csv(io.StringIO(content))
-                return df
-            else:
-                return pd.DataFrame()
-
-    async def write_csv_async(self, data, file_path):
-        async with aiofiles.open(file_path, mode='w') as file:
-            async with aiofiles.open(file_path, mode='w') as file:
-                csv_content = data.to_csv(index=False)
-                await file.write(csv_content)
-
     async def getInstruments(self):
-        await asyncio.gather(self.parseBinanceInstruments(), self.parseOkxInstruments())
+        await asyncio.gather(self.parseBinanceInstruments(), self.parseOkxInstruments(), self.parseBybitInstruments())
 
     async def parseBinanceInstruments(self, get=False):
-        response = await self.make_request(self.BINANCE['url']['instruments'])
+        response = await request_async(self.BINANCE['url']['instruments'])
         markets = []
         instruments = []
         for inst in response['symbols']:
             for market in inst['permissions']:
-                if market == 'SPOT' or market == 'MARGIN':
+                if market == 'SPOT' or market == 'MARGIN' or market == 'LEVERAGED':
                     markets.append(market)
-                    instruments.append(inst['symbol'])
-                elif market == 'LEVERAGED':
-                    markets.append('SWAP')
                     instruments.append(inst['symbol'])
         await self.instrumentsToCsv(markets, instruments,
                                     self.BINANCE['instruments'])
@@ -59,7 +34,7 @@ class DataLoader():
         instruments = []
         markets = []
         for marketType in marketTypes:
-            response = await asyncio.gather(self.make_request(self.OKX['url']['instruments'] + marketType))
+            response = await asyncio.gather(request_async(self.OKX['url']['instruments'] + marketType))
             if get:
                 return {'market:': marketType, "data": response['data']}
             for inst in response[0]['data']:
@@ -67,12 +42,22 @@ class DataLoader():
                 instruments.append(inst['instId'])
         await self.instrumentsToCsv(markets, instruments, self.OKX['instruments'])
 
+    async def parseBybitInstruments(self, get=False):
+        marketTypes = ['spot', 'linear']
+        instruments = []
+        markets = []
+        for marketType in marketTypes:
+            response = await asyncio.gather(request_async(self.BYBIT['url']['instruments'] + marketType))
+            if get:
+                return {'market:': marketType, "instruments": response['result']['list']}
+            for inst in response[0]['result']['list']:
+                markets.append(marketType)
+                instruments.append(inst['symbol'])
+        await self.instrumentsToCsv(markets, instruments, self.BYBIT['instruments'])
+
     async def instrumentsToCsv(self, markets: list, instruments: list, filepath: str):
-        file = await self.read_csv_async(filepath)
+        file = await read_csv(filepath)
         df = pd.DataFrame({"market": markets, "instrument": instruments})
-        print(file)
         if not file.equals(df):
-            await self.write_csv_async(df, filepath)
-            print('Update inst')
-        else:
-            print('dont update inst')
+            await write_csv(df, filepath)
+            print('Update: ', filepath)
