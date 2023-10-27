@@ -1,0 +1,29 @@
+{
+  "app": {
+    "title": "AI Price Analyzer",
+    "win_min_w": 900,
+    "win_min_h": 500,
+    "win_max_w": 1920,
+    "win_max_h": 1080
+  },
+  "markets": {
+    "binance": {
+      "instruments": "app/data/instruments/binance.csv",
+      "url": {
+        "root": "https://api.binance.com/api/v3/",
+        "instruments" : "https://api.binance.com/api/v3/exchangeInfo"
+      }
+    },
+    "okx": {
+      "instruments": "app/data/instruments/okx.csv",
+      "url": {
+        "root": "https://www.okx.com/api/v5/",
+        "instruments" : "https://www.okx.com/api/v5/public/instruments?instType="
+      }
+    },
+    "bybit": {
+      "instruments": "app/data/instruments/bybit.csv",
+      "url": "https://api.bybit.com/v5/"
+    }
+  }
+}
