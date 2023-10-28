@@ -1,13 +1,12 @@
 from app.service import Service
 from features.data_loader import DataLoader
-import asyncio
+
+from shared.exchanges.binance import Binance
 
 
-async def main():
-    if __name__ == '__main__':
-        app = Service()
-        test = DataLoader()
+def main():
+    1
 
-        await test.getInstruments()
-        await app.start()
-asyncio.run(main())
+
+if __name__ == '__main__':
+    Service().start()
