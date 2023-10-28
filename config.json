@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "AI Price Analyzer",
+    "title": "RNN LSTM AI [Coach application]",
     "win_min_w": 900,
     "win_min_h": 500,
     "win_max_w": 1920,

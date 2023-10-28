@@ -1,0 +1,10 @@
+{
+  "pad_x": 10,
+  "pad_y": 10,
+  "color": {
+    "app_background": "#444444",
+    "frame_background": "#555555",
+    "text": "#ffffff",
+    "text_alt": "#000000"
+  }
+}
