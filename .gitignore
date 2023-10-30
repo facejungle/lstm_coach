@@ -1,9 +1,4 @@
-shared/ai/
-build/
-dist/
-app/data/
-**/*.spec
-
 .vscode
+.venv
 **/__pycache__
 data/

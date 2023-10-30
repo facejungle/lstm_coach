@@ -5,13 +5,35 @@ from threading import Thread
 import os
 import asyncio
 from typing import Callable, List
+import aiohttp
+
+
+def async_wrapper(f: Callable, f_args: List = ()) -> any:
+    """Function wrapper for async functions"""
+    def wrapper(q):
+        x = asyncio.run(f(*f_args))
+        q.put(x)
+    q = Queue()
+    wrapper(q)
+    return q.get()
+
+
+async def request_async(url: str):
+    """Async request"""
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            data = await response.json()
+            return data
 
 
 def create_folder(path: str):
     """Function creating folder if folder not found"""
     try:
-        path.replace("/", "\\")
-        os.makedirs(path)
+        if sys.version_info[0] == 3:
+            os.makedirs(path)
+        else:
+            path.replace("/", "\\")
+            os.makedirs(path)
     except FileExistsError:
         return
 
