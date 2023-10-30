@@ -1,12 +1,14 @@
 import json
-
-from shared.utils.async_utils import instrumentsToCsv, request_async
+from features.async_utils import request_async
+from features.data_processor import instruments_to_csv
+from features.utils import resource_path
 
 
 class Okx():
     def __init__(self):
-        self.AppCfg: str = json.load(open('config.json', 'r'))
-        self.OKX: str = self.AppCfg['markets']['okx']
+        self.AppCfg: str = json.load(
+            open(resource_path('shared\\exchanges\\config.json'), 'r', encoding='utf-8'))
+        self.OKX: str = self.AppCfg['okx']
         self.fileInstruments: str = self.OKX['instruments']
         self.urlInstruments: str = self.OKX['url']['instruments']
 
@@ -21,4 +23,4 @@ class Okx():
             for inst in response['data']:
                 markets.append(inst['instType'])
                 instruments.append(inst['instId'])
-        await instrumentsToCsv(markets, instruments, self.fileInstruments)
+        instruments_to_csv(markets, instruments, self.fileInstruments)

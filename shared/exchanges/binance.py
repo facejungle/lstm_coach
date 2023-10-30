@@ -1,13 +1,15 @@
-import asyncio
 import json
 
-from shared.utils.async_utils import instrumentsToCsv, request_async
+from features.async_utils import request_async
+from features.data_processor import instruments_to_csv
+from features.utils import resource_path
 
 
 class Binance():
     def __init__(self):
-        self.AppCfg: str = json.load(open('config.json', 'r'))
-        self.BINANCE: str = self.AppCfg['markets']['binance']
+        self.AppCfg: str = json.load(
+            open(resource_path('shared\\exchanges\\config.json'), 'r', encoding='utf-8'))
+        self.BINANCE: str = self.AppCfg['binance']
         self.fileInstruments: str = self.BINANCE['instruments']
         self.urlInstruments: str = self.BINANCE['url']['instruments']
         self.urlCandles: str = self.BINANCE['url']['candles']
@@ -18,10 +20,10 @@ class Binance():
         instruments = []
         for inst in response['symbols']:
             for market in inst['permissions']:
-                if market == 'SPOT' or market == 'MARGIN' or market == 'LEVERAGED':
+                if market in ('SPOT', 'MARGIN', 'LEVERAGED'):
                     markets.append(market)
                     instruments.append(inst['symbol'])
-        await instrumentsToCsv(markets, instruments, self.fileInstruments)
+        instruments_to_csv(markets, instruments, self.fileInstruments)
         if get:
             return response
 
