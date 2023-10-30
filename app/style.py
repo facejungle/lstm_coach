@@ -1,11 +1,8 @@
 """
 Style for application
 """
-import tkinter as tk
-from tkinter import font
-
-from features.utils import resource_path
-app_styles = {
+from tkinter import font, ttk
+APP_STYLE = {
     "pad_x": 10,
     "pad_y": 10,
     "color": {
@@ -44,26 +41,25 @@ def make_app_fonts(self):
         weight="bold",
         slant="roman"
     )
-    tk.ttk.Style().configure(
+    ttk.Style().configure(
         '.',
         font=self.font_verdana,
-        foreground=app_styles['color']['text'],
+        foreground=APP_STYLE['color']['text'],
         padding=5,
-        background=app_styles['color']['frame_background']
+        background=APP_STYLE['color']['frame_background']
     )
 
 
 def make_app_style(self):
     """ Set up default style """
-    self.app.iconbitmap(default=resource_path("app/res/icon.ico"))
+    # self.app.iconbitmap(default=resource_path("app/res/icon.ico"))
     self.app.geometry(
-        f"{app_styles['window']['min_w']}x{app_styles['window']['min_h']}+500+500")
+        f"{APP_STYLE['window']['min_w']}x{APP_STYLE['window']['min_h']}+500+500")
     self.app.minsize(
-        app_styles['window']['min_w'],
-        app_styles['window']['min_h']
+        APP_STYLE['window']['min_w'],
+        APP_STYLE['window']['min_h']
     )
     self.app.attributes('-alpha', 0.98)
-    self.app.title(app_styles['window']['title'])
-    style = tk.ttk.Style()
-    # style.configure("Treeview", foreground=app_styles['color']['text'])
-    style.theme_use("vista")
+    self.app.title(APP_STYLE['window']['title'])
+    style = ttk.Style()
+    style.theme_use("clam")

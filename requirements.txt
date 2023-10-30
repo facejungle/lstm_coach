@@ -1,0 +1,8 @@
+aiofiles
+aiohttp
+asyncio
+pandas
+matplotlib
+tk
+tensorflow
+numpy

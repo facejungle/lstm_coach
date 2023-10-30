@@ -1,23 +1,9 @@
 """Module with data processor"""
-import asyncio
 import io
 import os
 import aiofiles
 import pandas as pd
-from features.utils import create_folder, new_thread, resource_path
-
-
-def instruments_to_csv(markets: list, instruments: list, filepath: str):
-    """Import instruments to filepath"""
-    res_path = resource_path(filepath)
-    file = read_csv__(res_path)
-    df = pd.DataFrame({"market": markets, "instrument": instruments})
-    if file is not None:
-        if not file.equals(df):
-            write_csv_thread(df, res_path)
-            print('Update: ', res_path)
-    else:
-        write_csv__(df, res_path)
+from app.shared.utils import create_folder, new_thread, resource_path
 
 
 def read_csv__(file_path: str) -> pd.DataFrame:
