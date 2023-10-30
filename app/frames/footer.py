@@ -3,7 +3,7 @@ from tkinter.ttk import Progressbar
 from app.style.style import app_styles
 
 
-async def make_app_footer(self):
+def make_app_footer(self):
     self.footer_frame = Frame(
         self.main_view,
         bg=app_styles['color']['app_background'],

@@ -1,7 +1,7 @@
 import tkinter as tk
 
 
-async def make_menu(self):
+def make_menu(self):
     style = tk.ttk.Style()
     app_style = style.theme_names()
     selected_theme = tk.StringVar()

@@ -1,12 +1,14 @@
 import json
-
-from shared.utils.async_utils import instrumentsToCsv, request_async
+from features.async_utils import request_async
+from features.data_processor import instruments_to_csv
+from features.utils import resource_path
 
 
 class Bybit():
     def __init__(self):
-        self.AppCfg: str = json.load(open('config.json', 'r'))
-        self.BYBIT: str = self.AppCfg['markets']['bybit']
+        self.AppCfg: str = json.load(
+            open(resource_path('shared\\exchanges\\config.json'), 'r', encoding='utf-8'))
+        self.BYBIT: str = self.AppCfg['bybit']
         self.fileInstruments: str = self.BYBIT['instruments']
         self.urlInstruments: str = self.BYBIT['url']['instruments']
         # self.urlCandles: str = self.BYBIT['url']['candles']
@@ -22,4 +24,4 @@ class Bybit():
             for inst in response['result']['list']:
                 markets.append(marketType)
                 instruments.append(inst['symbol'])
-        await instrumentsToCsv(markets, instruments, self.fileInstruments)
+        instruments_to_csv(markets, instruments, self.fileInstruments)

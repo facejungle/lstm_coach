@@ -1,0 +1,24 @@
+{
+  "binance": {
+    "instruments": "data\\instruments\\binance.csv",
+    "url": {
+      "root": "https://api.binance.com/api/v3/",
+      "instruments" : "https://api.binance.com/api/v3/exchangeInfo",
+      "candles": "https://api.binance.com/api/v3/klines?symbol="
+    }
+  },
+  "okx": {
+    "instruments": "data\\instruments\\okx.csv",
+    "url": {
+      "root": "https://www.okx.com/api/v5/",
+      "instruments" : "https://www.okx.com/api/v5/public/instruments?instType="
+    }
+  },
+  "bybit": {
+    "instruments": "data\\instruments\\bybit.csv",
+    "url": {
+      "root": "https://api.bybit.com/v5/",
+      "instruments" : "https://api.bybit.com/v5/market/instruments-info?category="
+    }
+  }
+}
