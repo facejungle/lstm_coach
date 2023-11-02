@@ -1,9 +1,12 @@
+"""Binance exchange class"""
 from pandas import DataFrame
 from app.features.data_loader import DataLoader
 from app.shared.utils import new_thread, request_async, resource_path
 
 
 class Binance():
+    """Binance exchange class"""
+
     def __init__(self):
         self.exchange_cfg: str = {
             "instruments": "data/instruments/binance.csv",
@@ -20,6 +23,7 @@ class Binance():
         self.url_candles: str = self.exchange_cfg['url']['candles']
 
     def parse_instruments(self, get_response=False):
+        """Binance exchange class"""
         response = new_thread(request_async, [self.url_instruments], True)
         data = []
 
@@ -38,6 +42,7 @@ class Binance():
         self.parse_candles('BTCUSDC', '1d', 1000)
 
     def parse_candles(self, instrument: str, timeframe: str, qty: int = None):
+        """Binance exchange class"""
         results: list = new_thread(request_async, [
             self.exchange_cfg['url']['candles'] + instrument + '&interval=' + timeframe], True)
 
@@ -48,5 +53,4 @@ class Binance():
                     '&endTime=' + str(results[-1][0]) + '&limit=500'
                 results.extend(new_thread(request_async, [url], True))
                 print(len(results))
-        print(len(results))
         return results

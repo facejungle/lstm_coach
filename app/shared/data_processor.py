@@ -8,26 +8,25 @@ from app.shared.utils import create_folder, new_thread, resource_path
 
 def read_csv__(file_path: str) -> pd.DataFrame:
     """Read csv file"""
-    while True:
-        try:
-            res_path = resource_path(file_path)
-            df = pd.read_csv(res_path)
-            return df
-        except FileNotFoundError:
-            create_folder(os.path.dirname(res_path))
-            write_csv__(pd.DataFrame(), res_path)
-        except pd.errors.EmptyDataError:
-            return
+    try:
+        res_path = resource_path(file_path)
+        df = pd.read_csv(res_path)
+        return df
+    except FileNotFoundError:
+        create_folder(os.path.dirname(res_path))
+        write_csv__(pd.DataFrame(), res_path)
+    except pd.errors.EmptyDataError:
+        return None
 
 
 def read_csv_thread(file_path: str) -> pd.DataFrame:
     """Async read csv file with new thread"""
-    return new_thread(read_csv_async, ([file_path, True]), True)
+    return new_thread(read_csv_async, ([file_path]), True)
 
 
-async def read_csv_async(file_path: str, with_create=False) -> pd.DataFrame:
+async def read_csv_async(file_path: str) -> pd.DataFrame | None:
     """
-    Reading csv file from file_path, if file not found - creating new empty file.
+    Reading csv file from file_path.
     file_path = /example/data.csv
     """
     res_path = resource_path(file_path)
@@ -39,12 +38,8 @@ async def read_csv_async(file_path: str, with_create=False) -> pd.DataFrame:
                 return df
             return pd.DataFrame()
     except FileNotFoundError:
-        if with_create:
-            create_folder(os.path.dirname(res_path))
-            await write_csv_async(pd.DataFrame(), res_path)
-        else:
-            print('ERROR: FOLDER OR FILE NOT FOUND',
-                  {file_path, read_csv_async})
+        print('ERROR: FOLDER OR FILE NOT FOUND', {file_path, read_csv_async})
+        return None
 
 
 def write_csv__(data: pd.DataFrame, file_path: str):
