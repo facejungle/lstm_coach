@@ -1,4 +1,4 @@
-from tkinter import StringVar, ttk
+from tkinter import StringVar, ttk, Event
 from app.features.data_loader import DataLoader
 from app.style import APP_STYLE
 
@@ -28,7 +28,7 @@ def make_first_line(self):
     exchanges = DataLoader().get_exchanges_list()
     exchange_var = StringVar(value=exchanges[0])
 
-    def choice_exchange():
+    def choice_exchange(event: Event):
         exchange_selection = exchange_field.get()
         market_field.set('')
         instruments_field.set('')
@@ -37,8 +37,9 @@ def make_first_line(self):
             exchange_markets = instruments['market'].unique()
             market_field.configure(
                 values=list(exchange_markets))
+        print(event.time)
 
-    def choice_market():
+    def choice_market(event: Event):
         market_selection = market_field.get()
         instruments_field.set('')
         exchange_selection = exchange_field.get()
@@ -48,6 +49,8 @@ def make_first_line(self):
                                                == market_selection].values
             instruments_field.configure(
                 values=[inst[1] for inst in exchange_instruments])
+        print(event.serial)
+
     exchange_field = ttk.Combobox(
         exchange_frame,
         values=exchanges,

@@ -3,6 +3,7 @@ aiohttp
 asyncio
 pandas
 matplotlib
+mplfinance
 tk
-tensorflow
 numpy
+tensorflow

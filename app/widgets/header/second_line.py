@@ -1,4 +1,5 @@
 from tkinter import ttk
+from app.features.model import AiModel
 from app.style import APP_STYLE
 
 
@@ -74,6 +75,6 @@ def make_second_line(self):
 
     def start_training():
         inputs = input_length_field.get()
-        # AiModel(inputs, 200, 444)
+        AiModel(inputs, 200, 444)
     btn = ttk.Button(second_line_frame, text="Button", command=start_training)
     btn.pack(anchor="e", expand=True)

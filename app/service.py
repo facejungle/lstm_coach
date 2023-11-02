@@ -29,6 +29,7 @@ class Service():
         )
 
     def start(self):
+        """start app"""
         make_app_fonts(self)
         make_app_style(self)
         make_menu(self)
@@ -39,8 +40,8 @@ class Service():
 
         self.app.mainloop()
 
-
 async def app_loader():
+    """app loader"""
     def start_app():
         loader.destroy()
         Service().start()
